@@ -1,0 +1,169 @@
+import "@astral/string"
+import "@text/stream"
+
+module yaml
+  __home__("text")
+
+  class YamlParser
+    static def tokenize(content)
+      s = Stream.new(content.chars())
+      tokens = []
+      
+      while true do
+        if !s.can_read()
+          break
+        end
+        
+        tokens << yaml::parse_token(s)
+      end
+
+      return tokens
+    end
+  end
+
+  def token(type, text = "")
+    return { "type": type, "text": text }
+  end
+  
+  def parse_quoted(s, initial_char)
+    builder = ""
+    c = ""
+  
+    while c != initial_char do
+      if s.peek() == "\n"
+        break
+      end
+  
+      builder += c
+      c = s.read()
+    end
+  
+    return yaml::token("QUOTED", builder)
+  end
+  
+  def parse_space(s, initial_char)
+    builder = ""
+    c = initial_char
+  
+    while c == " " do
+      if s.peek() != " "
+        break
+      end
+      builder += c
+      c = s.read()
+    end
+  
+    return yaml::token("SPACE", builder)
+  end
+  
+  def parse_letters(s, initial_char)
+    builder = initial_char
+    c = ""
+  
+    while true do
+      if s.peek() == "\n"
+        break
+      end
+  
+      peek_n = s.peekn(3)
+      if peek_n.ends_with(": ") || peek_n.ends_with(":\n")
+        return yaml::token("LITERAL", builder)
+      end
+  
+      c = s.read()
+      builder += c
+    end
+  
+    return yaml::token("LITERAL", builder)
+  end
+  
+  def parse_digits(s, initial_char)
+    builder = initial_char
+    c = ""
+  
+    while true do    
+      if s.peek() == "\n"
+        break
+      end
+      
+      builder += c
+      c = s.read()
+    end
+  
+    return yaml::token("NUMERIC_LITERAL", builder)
+  end
+  
+  def parse_colon(s)
+    c = ""
+  
+    if s.peek() == " "
+      s.read() # Skip the " "    
+    end
+  
+    return yaml::token("COLON", ":")
+  end
+  
+  def parse_comment(s)
+    builder = ""
+    c = ""
+  
+    while true do    
+      if s.peek() == "\n"
+        break
+      end
+  
+      builder += c
+      c = s.read()
+    end
+  
+    return yaml::token("COMMENT", builder)
+  end
+  
+  def parse_alphanumeric(s, c)
+    if "\"'".contains(c)
+      return yaml::parse_quoted(s, c)
+    elsif c == " "
+      return yaml::parse_space(s, c)
+    elsif c == "-"
+      return yaml::token("DASH", c)
+    elsif c == ":"
+      return yaml::parse_colon(s)
+    elsif c == "#"
+      return yaml::parse_comment(s)
+    elsif c == ","
+      return yaml::token("COMMA", c)
+    elsif c == "["
+      return yaml::token("OPEN_BRACKET", c)
+    elsif c == "]"
+      return yaml::token("CLOSE_BRACKET", c)
+    elsif c == "{"
+      return yaml::token("OPEN_BRACE", c)
+    elsif c == "}"
+      return yaml::token("CLOSE_BRACE", c)
+    elsif c == "("
+      return yaml::token("OPEN_PAREN", c)
+    elsif c == ")"
+      return yaml::token("CLOSE_PAREN", c)
+    elsif c == "\n"
+      return yaml::token("LF", c)
+    elsif c == "\t"
+      return yaml::token("TAB", c)
+    else
+      return yaml::token("OTHER", c)
+    end
+  end
+  
+  def parse_token(s)
+    c = s.read()
+  
+    if string::isnumeric(c)
+      return yaml::parse_digits(s, c)
+    elsif string::isalpha(c) || c == "_"
+      return yaml::parse_letters(s, c)
+    elsif !string::isalphanumeric(c)
+      return yaml::parse_alphanumeric(s, c)
+    end
+  
+    return yaml::token("OTHER", c)
+  end
+end

@@ -1,0 +1,71 @@
+import "@text/yaml"
+import "@astral/fs" as fs
+  
+def main()
+  import "@astral/argv" as argv
+  argv = argv.get()
+
+  if argv.size() > 0
+    handle_arg(argv[0])
+  end
+
+  parse_test()
+end
+
+def handle_arg(arg)
+  if arg.downcase().ends_with(".yml") || arg.downcase().ends_with(".yaml")
+    exit print_yaml(arg)
+  else
+    exit print_help()      
+  end
+end
+
+def print_help()
+  println
+"A YAML parser written in Astral
+
+usage: astral yaml <yaml_file>
+
+astral yaml test.yml        parse a YAML file
+astral yaml -h              print this message"
+  return 0
+end
+
+def print_yaml(path)
+  if !fs.exists(path)
+    println("The file `${path}` does not exist.")
+    return 1
+  end
+
+  parse_yaml_and_print(path)
+  return 0
+end
+
+def parse_yaml_and_print(path)
+  content = fs.read(path)
+  tokens = YamlParser.tokenize(content)
+
+  print_tokens(tokens)
+end
+
+def parse_test()
+  parse_yaml_and_print("test.yml")
+end
+
+def print_tokens(tokens)
+  import "@astral/string" as str
+  
+  for t in tokens do
+    if t.type == "COMMENT"
+      next
+    end
+  
+    if t.type == "LF"
+      println str.padend("${t.type}:", 20, " ") + "`\\n`"
+    else
+      println str.padend("${t.type}:", 20, " ") + "`${t.text}`"
+    end
+  end
+end
+
+main()

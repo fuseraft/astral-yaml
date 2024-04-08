@@ -1,0 +1,52 @@
+module stream
+  __home__("text")
+
+  class Stream
+    def initialize(array)
+      if !array.is_a(List)
+        throw "`array` must be a List"
+      end
+  
+      this._array = array
+      this._size = array.size()
+      this._pos = -1
+    end
+  
+    def can_read()
+      return this._pos + 1 < this._size
+    end
+  
+    def curr()
+      return this._array[this._pos]
+    end
+  
+    def read()
+      if this._pos + 1 < this._size
+        this._pos += 1
+        return this._array[this._pos]
+      end
+  
+      return ""
+    end
+  
+    def peek()
+      if this._pos + 1 < this._size
+        return this._array[this._pos + 1]
+      end
+  
+      return ""
+    end
+  
+    def peekn(n)
+      if this._pos + n < this._size
+        return (this._array).slice(this._pos, this._pos + n).join()
+      end
+  
+      return ""
+    end
+    
+    private (_array, _pos, _size)
+  end
+end
+
+# export "stream"

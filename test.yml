@@ -1,0 +1,41 @@
+server:
+  host: localhost
+  port: 8080
+  enabled: true
+
+database:
+  host: db.local
+  port: 5432
+  username: admin
+  password: secret
+  settings:
+    - connections: 10
+    - timeout: 30
+    - lazyLoad: true
+
+services:
+  - name: userservice
+    url: http://localhost:8000/users
+    methods:
+      - GET
+      - POST
+  - name: paymentservice
+    url: http://localhost:8001/pay
+    methods:
+      - POST
+
+logging:
+  level: debug
+  format: "[%d{HH:mm:ss}] [%t] %-5level - %msg%n"
+  destinations:
+    - console
+    - file
+    - syslog
+
+nested_structures:
+  level1:
+    level2:
+      level3:
+        - item1
+        - item2
+        - key: value
