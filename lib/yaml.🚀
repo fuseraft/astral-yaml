@@ -83,6 +83,7 @@ module yaml
   
     while true do    
       if s.peek() == "\n"
+        builder += c
         break
       end
       

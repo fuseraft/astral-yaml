@@ -28,7 +28,7 @@ LF:                 `\n`
 SPACE:              ` `
 LITERAL:            `port`
 COLON:              `:`
-NUMERIC_LITERAL:    `808`
+NUMERIC_LITERAL:    `8080`
 LF:                 `\n`
 SPACE:              ` `
 LITERAL:            `enabled`
@@ -47,7 +47,7 @@ LF:                 `\n`
 SPACE:              ` `
 LITERAL:            `port`
 COLON:              `:`
-NUMERIC_LITERAL:    `543`
+NUMERIC_LITERAL:    `5432`
 LF:                 `\n`
 SPACE:              ` `
 LITERAL:            `username`
@@ -68,14 +68,14 @@ DASH:               `-`
 SPACE:              ``
 LITERAL:            `connections`
 COLON:              `:`
-NUMERIC_LITERAL:    `1`
+NUMERIC_LITERAL:    `10`
 LF:                 `\n`
 SPACE:              `   `
 DASH:               `-`
 SPACE:              ``
 LITERAL:            `timeout`
 COLON:              `:`
-NUMERIC_LITERAL:    `3`
+NUMERIC_LITERAL:    `30`
 LF:                 `\n`
 SPACE:              `   `
 DASH:               `-`
@@ -200,6 +200,5 @@ SPACE:              ``
 LITERAL:            `key`
 COLON:              `:`
 LITERAL:            `value`
-LF:                 `\n`
 LF:                 `\n`
 ```
