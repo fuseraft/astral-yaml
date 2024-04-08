@@ -4,7 +4,7 @@ import "@text/stream"
 module yaml
   __home__("text")
 
-  class YamlParser
+  class YamlLexer
     static def tokenize(content)
       s = Stream.new(content.chars())
       tokens = []

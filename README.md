@@ -1,6 +1,6 @@
 # astral yaml
 
-A YAML parser written in [Astral](https://github.com/fuseraft/astral).
+A YAML lexer written in [Astral](https://github.com/fuseraft/astral).
 
 ### Usage
 
