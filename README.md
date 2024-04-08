@@ -65,21 +65,18 @@ COLON:              `:`
 LF:                 `\n`
 SPACE:              `   `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `connections`
 COLON:              `:`
 NUMERIC_LITERAL:    `10`
 LF:                 `\n`
 SPACE:              `   `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `timeout`
 COLON:              `:`
 NUMERIC_LITERAL:    `30`
 LF:                 `\n`
 SPACE:              `   `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `lazyLoad`
 COLON:              `:`
 LITERAL:            `true`
@@ -90,7 +87,6 @@ COLON:              `:`
 LF:                 `\n`
 SPACE:              ` `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `name`
 COLON:              `:`
 LITERAL:            `userservice`
@@ -106,17 +102,14 @@ COLON:              `:`
 LF:                 `\n`
 SPACE:              `     `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `GET`
 LF:                 `\n`
 SPACE:              `     `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `POST`
 LF:                 `\n`
 SPACE:              ` `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `name`
 COLON:              `:`
 LITERAL:            `paymentservice`
@@ -132,7 +125,6 @@ COLON:              `:`
 LF:                 `\n`
 SPACE:              `     `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `POST`
 LF:                 `\n`
 LF:                 `\n`
@@ -155,17 +147,14 @@ COLON:              `:`
 LF:                 `\n`
 SPACE:              `   `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `console`
 LF:                 `\n`
 SPACE:              `   `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `file`
 LF:                 `\n`
 SPACE:              `   `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `syslog`
 LF:                 `\n`
 LF:                 `\n`
@@ -186,17 +175,14 @@ COLON:              `:`
 LF:                 `\n`
 SPACE:              `       `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `item1`
 LF:                 `\n`
 SPACE:              `       `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `item2`
 LF:                 `\n`
 SPACE:              `       `
 DASH:               `-`
-SPACE:              ``
 LITERAL:            `key`
 COLON:              `:`
 LITERAL:            `value`

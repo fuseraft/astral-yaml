@@ -24,6 +24,12 @@ module yaml
   def token(type, text = "")
     return { "type": type, "text": text }
   end
+
+  def skip_ws(s)
+    if s.peek() == " "
+      s.read() # Skip the " "    
+    end
+  end
   
   def parse_quoted(s, initial_char)
     builder = ""
@@ -95,13 +101,13 @@ module yaml
   end
   
   def parse_colon(s)
-    c = ""
-  
-    if s.peek() == " "
-      s.read() # Skip the " "    
-    end
-  
+    yaml::skip_ws(s)
     return yaml::token("COLON", ":")
+  end
+  
+  def parse_dash(s)
+    yaml::skip_ws(s)
+    return yaml::token("DASH", "-")
   end
   
   def parse_comment(s)
@@ -126,7 +132,7 @@ module yaml
     elsif c == " "
       return yaml::parse_space(s, c)
     elsif c == "-"
-      return yaml::token("DASH", c)
+      return yaml::parse_dash(s)
     elsif c == ":"
       return yaml::parse_colon(s)
     elsif c == "#"
