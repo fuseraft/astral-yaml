@@ -4,6 +4,46 @@ import "@text/stream"
 module yaml
   __home__("text")
 
+  class YamlParser
+    def initialize() end
+    
+    def parse(content)
+      tokens = YamlLexer.tokenize(content)
+      s = Stream.new(tokens)
+      yml = {}
+      yml.line_no = 1
+      yml.indent_level = 0
+
+      while true do
+        if !s.can_read()
+          break
+        end
+
+        parse_token(s, yml)
+      end
+    end
+
+    def parse_token(s, yml)
+      t = s.read()
+      if t.type == "SPACE"
+        parse_indentation(t, yml)
+      elsif t.type == "LF"
+        parse_linefeed(t, yml)
+      elsif t.type != "COMMENT"
+        println "${yml.line_no}: ${yml.indent_level}: ${t.text}"
+      end
+    end
+
+    def parse_indentation(t, yml)
+      yml.indent_level = t.text.size() + 1
+    end
+
+    def parse_linefeed(t, yml)
+      yml.line_no = yml.line_no + 1
+      yml.indent_level = 0
+    end
+  end
+
   class YamlLexer
     static def tokenize(content)
       s = Stream.new(content.chars())

@@ -43,9 +43,11 @@ end
 
 def parse_yaml_and_print(path)
   content = fs.read(path)
-  tokens = YamlLexer.tokenize(content)
 
-  print_tokens(tokens)
+  parser = YamlParser.new()
+  parser.parse(content)
+  #tokens = YamlLexer.tokenize(content)
+  #print_tokens(tokens)
 end
 
 def parse_test()
