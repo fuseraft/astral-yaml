@@ -30,7 +30,7 @@ module yaml
       elsif t.type == "LF"
         parse_linefeed(t, yml)
       elsif t.type != "COMMENT"
-        println "${yml.line_no}: ${yml.indent_level}: ${t.text}"
+        println "${yml.line_no}: ${yml.indent_level}: ${t.type}: ${t.text}"
       end
     end
 
