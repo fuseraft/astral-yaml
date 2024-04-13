@@ -7,39 +7,39 @@ module stream
         throw "`array` must be a List"
       end
   
-      this._array = array
-      this._size = array.size()
-      this._pos = -1
+      @_array = array
+      @_size = array.size()
+      @_pos = -1
     end
   
     def can_read()
-      return this._pos + 1 < this._size
+      return @_pos + 1 < @_size
     end
   
     def curr()
-      return this._array[this._pos]
+      return @_array[@_pos]
     end
   
     def read()
-      if this._pos + 1 < this._size
-        this._pos += 1
-        return this._array[this._pos]
+      if @_pos + 1 < @_size
+        @_pos += 1
+        return @_array[@_pos]
       end
   
       return ""
     end
   
     def peek()
-      if this._pos + 1 < this._size
-        return this._array[this._pos + 1]
+      if @_pos + 1 < @_size
+        return @_array[@_pos + 1]
       end
   
       return ""
     end
   
     def peekn(n)
-      if this._pos + n < this._size
-        return (this._array).slice(this._pos, this._pos + n).join()
+      if @_pos + n < @_size
+        return (@_array).slice(@_pos, @_pos + n).join()
       end
   
       return ""
