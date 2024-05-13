@@ -1,0 +1,64 @@
+import "@kiwi/argv"
+import "@kiwi/fs" as fs
+import "@text/yaml"
+
+usage = 
+"A YAML parser written in kiwi
+
+usage: kiwi yaml <yaml_file>
+
+kiwi yaml test.yml        parse a YAML file
+kiwi yaml -h              print this message"
+  
+fn main(args)
+  if args.size() > 0
+    handle_arg(args[0])
+  end
+
+  return parse_yaml_and_print("test.yml")
+end
+
+fn handle_arg(arg)
+  return print_yaml(arg) when arg.downcase().ends_with(".yml") || arg.downcase().ends_with(".yaml")
+  return print_help()
+end
+
+fn print_help()
+  println(usage)
+  return 0
+end
+
+fn print_yaml(path)
+  if !fs.exists(path)
+    println("The file `${path}` does not exist.")
+    return 1
+  end
+
+  return parse_yaml_and_print(path)
+end
+
+fn parse_yaml_and_print(path)
+  content = fs.read(path)
+
+  parser = YamlParser.new()
+  parser.parse(content)
+  #tokens = YamlLexer.tokenize(content)
+  #print_tokens(tokens)
+  return 0
+end
+
+fn print_tokens(tokens)
+  import "@kiwi/string" as str
+  
+  for t in tokens do
+    next when t.type == "COMMENT"
+
+    if t.type == "LF"
+      println str.padend("${t.type}:", 20, " ") + "`\\n`"
+    else
+      println str.padend("${t.type}:", 20, " ") + "`${t.text}`"
+    end
+  end
+end
+
+main(argv::get())

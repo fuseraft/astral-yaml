@@ -1,24 +1,17 @@
-module stream
+package stream
   __home__("text")
 
   class Stream
     def initialize(array)
-      if !array.is_a(List)
-        throw "`array` must be a List"
-      end
-  
+      throw "`array` must be a List" when !array.is_a(List)
       @_array = array
       @_size = array.size()
       @_pos = -1
     end
   
-    def can_read()
-      return @_pos + 1 < @_size
-    end
+    def can_read() return @_pos + 1 < @_size end
   
-    def curr()
-      return @_array[@_pos]
-    end
+    def curr() return @_array[@_pos] end
   
     def read()
       if @_pos + 1 < @_size
@@ -30,23 +23,15 @@ module stream
     end
   
     def peek()
-      if @_pos + 1 < @_size
-        return @_array[@_pos + 1]
-      end
-  
+      return @_array[@_pos + 1] when @_pos + 1 < @_size
       return ""
     end
   
     def peekn(n)
-      if @_pos + n < @_size
-        return (@_array).slice(@_pos, @_pos + n).join()
-      end
-  
+      return (@_array).slice(@_pos, @_pos + n).join() when @_pos + n < @_size
       return ""
     end
     
     private (_array, _pos, _size)
   end
 end
-
-# export "stream"

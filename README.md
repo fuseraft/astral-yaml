@@ -1,17 +1,17 @@
-# astral yaml
+# kiwi yaml
 
-A YAML lexer written in [Astral](https://github.com/fuseraft/astral).
+A YAML lexer written in [kiwi](https://github.com/fuseraft/kiwi).
 
 ### Usage
 
 ```
-astral yaml <yaml_file>
+kiwi yaml <yaml_file>
 ```
 
 ### Example
 
 ```
-astral yaml test.yml > test-tokens.txt
+kiwi yaml test.yml > test-tokens.txt
 ```
 
 ### Output

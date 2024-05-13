@@ -1,7 +1,7 @@
-import "@astral/string"
+import "@kiwi/string"
 import "@text/stream"
 
-module yaml
+package yaml
   __home__("text")
 
   class YamlParser
@@ -16,10 +16,7 @@ module yaml
       yml.stack = [{}]
 
       while true do
-        if !s.can_read()
-          break
-        end
-
+        break when !s.can_read()
         parse_token(yml, s)
       end
     end
@@ -70,10 +67,7 @@ module yaml
       tokens = []
       
       while true do
-        if !s.can_read()
-          break
-        end
-        
+        break when !s.can_read()          
         tokens << yaml::parse_token(s)
       end
 
@@ -81,25 +75,22 @@ module yaml
     end
   end
 
-  def token(type, text = "")
+  fn token(type, text = "")
     return { "type": type, "text": text }
   end
 
-  def skip_ws(s)
+  fn skip_ws(s)
     if s.peek() == " "
       s.read() # Skip the " "    
     end
   end
   
-  def parse_quoted(s, initial_char)
+  fn parse_quoted(s, initial_char)
     builder = ""
     c = ""
   
     while c != initial_char do
-      if s.peek() == "\n"
-        break
-      end
-  
+      break when s.peek() == "\n"
       builder += c
       c = s.read()
     end
@@ -107,14 +98,12 @@ module yaml
     return yaml::token("QUOTED", builder)
   end
   
-  def parse_space(s, initial_char)
+  fn parse_space(s, initial_char)
     builder = ""
     c = initial_char
   
     while c == " " do
-      if s.peek() != " "
-        break
-      end
+      break when s.peek() != " "
       builder += c
       c = s.read()
     end
@@ -122,14 +111,12 @@ module yaml
     return yaml::token("SPACE", builder)
   end
   
-  def parse_letters(s, initial_char)
+  fn parse_letters(s, initial_char)
     builder = initial_char
     c = ""
   
     while true do
-      if s.peek() == "\n"
-        break
-      end
+      break when s.peek() == "\n"
   
       peek_n = s.peekn(3)
       if peek_n.ends_with(": ") || peek_n.ends_with(":\n")
@@ -143,7 +130,7 @@ module yaml
     return yaml::token("LITERAL", builder)
   end
   
-  def parse_digits(s, initial_char)
+  fn parse_digits(s, initial_char)
     builder = initial_char
     c = ""
   
@@ -160,25 +147,22 @@ module yaml
     return yaml::token("NUMERIC_LITERAL", builder)
   end
   
-  def parse_colon(s)
+  fn parse_colon(s)
     yaml::skip_ws(s)
     return yaml::token("COLON", ":")
   end
   
-  def parse_dash(s)
+  fn parse_dash(s)
     yaml::skip_ws(s)
     return yaml::token("DASH", "-")
   end
   
-  def parse_comment(s)
+  fn parse_comment(s)
     builder = ""
     c = ""
   
     while true do    
-      if s.peek() == "\n"
-        break
-      end
-  
+      break when s.peek() == "\n"
       builder += c
       c = s.read()
     end
@@ -186,51 +170,29 @@ module yaml
     return yaml::token("COMMENT", builder)
   end
   
-  def parse_alphanumeric(s, c)
-    if "\"'".contains(c)
-      return yaml::parse_quoted(s, c)
-    elsif c == " "
-      return yaml::parse_space(s, c)
-    elsif c == "-"
-      return yaml::parse_dash(s)
-    elsif c == ":"
-      return yaml::parse_colon(s)
-    elsif c == "#"
-      return yaml::parse_comment(s)
-    elsif c == ","
-      return yaml::token("COMMA", c)
-    elsif c == "["
-      return yaml::token("OPEN_BRACKET", c)
-    elsif c == "]"
-      return yaml::token("CLOSE_BRACKET", c)
-    elsif c == "{"
-      return yaml::token("OPEN_BRACE", c)
-    elsif c == "}"
-      return yaml::token("CLOSE_BRACE", c)
-    elsif c == "("
-      return yaml::token("OPEN_PAREN", c)
-    elsif c == ")"
-      return yaml::token("CLOSE_PAREN", c)
-    elsif c == "\n"
-      return yaml::token("LF", c)
-    elsif c == "\t"
-      return yaml::token("TAB", c)
-    else
-      return yaml::token("OTHER", c)
-    end
+  fn parse_alphanumeric(s, c)
+    return yaml::parse_quoted(s, c)        when "\"'".contains(c)
+    return yaml::parse_space(s, c)         when c == " "
+    return yaml::parse_dash(s)             when c == "-"
+    return yaml::parse_colon(s)            when c == ":"
+    return yaml::parse_comment(s)          when c == "#"
+    return yaml::token("COMMA", c)         when c == ","
+    return yaml::token("OPEN_BRACKET", c)  when c == "["
+    return yaml::token("CLOSE_BRACKET", c) when c == "]"
+    return yaml::token("OPEN_BRACE", c)    when c == "{"
+    return yaml::token("CLOSE_BRACE", c)   when c == "}"
+    return yaml::token("OPEN_PAREN", c)    when c == "("
+    return yaml::token("CLOSE_PAREN", c)   when c == ")"
+    return yaml::token("LF", c)            when c == "\n"
+    return yaml::token("TAB", c)           when c == "\t"
+    return yaml::token("OTHER", c)
   end
   
-  def parse_token(s)
+  fn parse_token(s)
     c = s.read()
-  
-    if string::isnumeric(c)
-      return yaml::parse_digits(s, c)
-    elsif string::isalpha(c) || c == "_"
-      return yaml::parse_letters(s, c)
-    elsif !string::isalphanumeric(c)
-      return yaml::parse_alphanumeric(s, c)
-    end
-  
+    return yaml::parse_digits(s, c)        when string::isnumeric(c)
+    return yaml::parse_letters(s, c)       when string::isalpha(c) || c == "_"
+    return yaml::parse_alphanumeric(s, c)  when !string::isalphanumeric(c)
     return yaml::token("OTHER", c)
   end
 end
